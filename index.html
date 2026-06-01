@@ -61,17 +61,90 @@
     margin-top: 6px;
   }
 
-  /* SEÇÃO DO PACOTINHO */
+  /* SEÇÃO DO PACOTINHO ANIMADO */
   .pack-section {
     max-width: 800px;
     margin: 0 auto 2rem;
     background: #112414;
     border: 2px solid var(--green-light);
     border-radius: 16px;
-    padding: 20px;
+    padding: 25px;
     text-align: center;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
   }
+
+  /* O PACOTE DE FIGURINHAS FISICO */
+  .pack-container {
+    position: relative;
+    width: 140px;
+    height: 190px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 10px 0;
+  }
+  .pack-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+    border: 3px solid var(--gold);
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  .pack-wrapper::before {
+    content: 'COPA 2026';
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+  .pack-wrapper::after {
+    content: '⚽ GESTÃO ⚽';
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--white);
+    margin-top: 5px;
+    opacity: 0.8;
+  }
+
+  /* Animação de tremor do pacote */
+  .pack-container.shaking .pack-wrapper {
+    animation: shakePack 0.5s infinite;
+  }
+  @keyframes shakePack {
+    0% { transform: translate(2px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(0px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(2px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(2px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
+  /* Animação de Rasgar / Sumir */
+  .pack-container.ripping .pack-wrapper {
+    animation: ripPack 0.6s forwards ease-in;
+  }
+  @keyframes ripPack {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1) translateY(-10px); filter: brightness(1.5); }
+    100% { transform: scale(0.3) rotate(15deg); opacity: 0; filter: blur(5px); }
+  }
+
   .pack-btn {
     font-family: 'Bebas Neue', sans-serif;
     background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
@@ -85,16 +158,17 @@
     box-shadow: 0 4px 15px rgba(232,184,75,0.4);
     transition: all 0.2s ease;
   }
-  .pack-btn:hover {
-    transform: scale(1.03);
-  }
+  .pack-btn:hover { transform: scale(1.03); }
+  .pack-btn:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
+
   .pack-opened-display {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 15px;
-    margin-top: 15px;
+    margin-top: 5px;
     min-height: 60px;
+    width: 100%;
   }
   .mini-sticker {
     background: var(--card-bg);
@@ -105,11 +179,18 @@
     font-weight: 700;
     font-size: 14px;
     color: var(--white);
-    min-width: 90px;
+    min-width: 100px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    opacity: 0;
+    transform: translateY(15px);
+    animation: revealMini 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  @keyframes revealMini {
+    to { opacity: 1; transform: translateY(0); }
   }
   .mini-sticker span { display: block; color: var(--gold); font-size: 11px; margin-top: 2px; }
+  .mini-sticker.is-new span { color: #1A9B5A; font-weight: bold; }
 
   /* BANNER DE PARABÉNS */
   .congrats-message {
@@ -159,7 +240,6 @@
     max-width: 800px;
     margin: 0 auto;
   }
-
   .sticker-card {
     background: var(--card-bg);
     border: 1.5px solid rgba(232,184,75,0.15);
@@ -258,6 +338,9 @@
 </div>
 
 <div class="pack-section">
+  <div class="pack-container" id="pack-graphic">
+    <div class="pack-wrapper"></div>
+  </div>
   <button class="pack-btn" id="open-pack-btn">🛍️ ABRIR PACOTINHO</button>
   <div class="pack-opened-display" id="pack-results"></div>
 </div>
@@ -292,161 +375,3 @@
     <div class="card-img-wrap"><img class="card-img" src="ramon.jpg" alt="Ramon"></div>
     <div class="card-body"><div class="card-name">Ramon</div><div class="card-role">Volante</div><div class="card-stars">★★★★★</div></div>
   </div>
-  <div class="sticker-card" data-number="5" data-name="Gustavo">
-    <div class="card-num">5</div>
-    <div class="card-img-wrap"><img class="card-img" src="gustavo.png" alt="Gustavo"></div>
-    <div class="card-body"><div class="card-name">Gustavo</div><div class="card-role">Meia-Armador</div><div class="card-stars">★★★★★</div></div>
-  </div>
-  <div class="sticker-card" data-number="6" data-name="Cris Porfírio">
-    <div class="card-num">6</div>
-    <div class="card-img-wrap"><img class="card-img" src="cris.jpg" alt="Cris Porfírio"></div>
-    <div class="card-body"><div class="card-name">Cris Porfírio</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
-  </div>
-  <div class="sticker-card" data-number="7" data-name="Vera">
-    <div class="card-num">7</div>
-    <div class="card-img-wrap"><img class="card-img" src="vera.jpg" alt="Vera"></div>
-    <div class="card-body"><div class="card-name">Vera</div><div class="card-role">Ponta Esquerda</div><div class="card-stars">★★★★★</div></div>
-  </div>
-  <div class="sticker-card" data-number="8" data-name="Eduardo">
-    <div class="card-num">8</div>
-    <div class="card-img-wrap"><img class="card-img" src="eduardo.jpg" alt="Eduardo"></div>
-    <div class="card-body"><div class="card-name">Eduardo</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
-  </div>
-  <div class="sticker-card" data-number="9" data-name="Laura">
-    <div class="card-num">9</div>
-    <div class="card-img-wrap"><img class="card-img" src="laura.jpg" alt="Laura"></div>
-    <div class="card-body"><div class="card-name">Laura</div><div class="card-role">Ponta Direita</div><div class="card-stars">★★★★★</div></div>
-  </div>
-</div>
-
-<div class="album-footer">Sede da Gestão Cadastro Único/Conselhos · © 2026</div>
-
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const cards = document.querySelectorAll('.sticker-card');
-    const counter = document.getElementById('pasted-count');
-    const banner = document.getElementById('congrats-banner');
-    const openPackBtn = document.getElementById('open-pack-btn');
-    const packResults = document.getElementById('pack-results');
-    
-    const namesMapping = {
-      "1": "Diego", "2": "Cris Fane", "3": "Lúcio", "4": "Ramon",
-      "5": "Gustavo", "6": "Cris Porfírio", "7": "Vera", "8": "Eduardo", "9": "Laura"
-    };
-
-    // Inicializa os storages vazios se não existirem
-    if(!localStorage.getItem('pasted_stickers')) localStorage.setItem('pasted_stickers', JSON.stringify([]));
-    if(!localStorage.getItem('owned_inventory')) localStorage.setItem('owned_inventory', JSON.stringify([]));
-
-    function getStorageData(key) {
-      try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
-    }
-
-    function loadSavedState() {
-      const pasted = getStorageData('pasted_stickers');
-      const owned = getStorageData('owned_inventory');
-
-      cards.forEach(card => {
-        const num = card.getAttribute('data-number');
-        if (pasted.includes(num)) {
-          card.classList.add('pasted');
-        } else if (owned.includes(num)) {
-          card.classList.add('can-paste');
-        }
-      });
-      updateCounterDisplay();
-    }
-
-    // Gerenciador do botão "Abrir Pacotinho"
-    openPackBtn.addEventListener('click', () => {
-      packResults.innerHTML = '';
-      let owned = getStorageData('owned_inventory');
-      const pasted = getStorageData('pasted_stickers');
-
-      for (let i = 0; i < 3; i++) {
-        const randomNum = Math.floor(Math.random() * 9) + 1;
-        const numStr = randomNum.toString();
-
-        if (!owned.includes(numStr)) {
-          owned.push(numStr);
-        }
-
-        const miniCard = document.createElement('div');
-        miniCard.className = 'mini-sticker';
-        
-        let statusText = pasted.includes(numStr) ? '<span>(Repetida)</span>' : '<span>(Disponível)</span>';
-        miniCard.innerHTML = `Nº ${numStr} <div>${namesMapping[numStr]}</div> ${statusText}`;
-        packResults.appendChild(miniCard);
-
-        const targetCard = document.querySelector(`[data-number="${numStr}"]`);
-        if (targetCard && !targetCard.classList.contains('pasted')) {
-          targetCard.classList.add('can-paste');
-        }
-      }
-
-      localStorage.setItem('owned_inventory', JSON.stringify(owned));
-    });
-
-    // Clique nas figurinhas do álbum
-    cards.forEach(card => {
-      card.addEventListener('click', () => {
-        const num = card.getAttribute('data-number');
-        const name = card.getAttribute('data-name');
-        let pasted = getStorageData('pasted_stickers');
-        let owned = getStorageData('owned_inventory');
-
-        // Se já está colada, remove (Descola)
-        if (card.classList.contains('pasted')) {
-          card.classList.remove('pasted');
-          card.classList.add('can-paste');
-          
-          pasted = pasted.filter(n => n !== num);
-          if(!owned.includes(num)) owned.push(num);
-          
-          localStorage.setItem('pasted_stickers', JSON.stringify(pasted));
-          localStorage.setItem('owned_inventory', JSON.stringify(owned));
-          updateCounterDisplay();
-          return;
-        }
-
-        // Se está disponível no inventário, cola
-        if (owned.includes(num) || card.classList.contains('can-paste')) {
-          card.classList.remove('can-paste');
-          card.classList.add('pasted');
-          
-          if(!pasted.includes(num)) pasted.push(num);
-          owned = owned.filter(n => n !== num);
-
-          localStorage.setItem('pasted_stickers', JSON.stringify(pasted));
-          localStorage.setItem('owned_inventory', JSON.stringify(owned));
-          
-          updateCounterDisplay();
-          dispararConfeteSeCompleto();
-        } else {
-          alert(`Você não tem a figurinha do(a) ${name}. Clique em "Abrir Pacotinho" no topo!`);
-        }
-      });
-    });
-
-    function updateCounterDisplay() {
-      const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
-      counter.textContent = totalPasted;
-      banner.style.display = (totalPasted === 9) ? 'block' : 'none';
-    }
-
-    function dispararConfeteSeCompleto() {
-      const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
-      if (totalPasted === 9 && typeof confetti === 'function') {
-        confetti({ particleCount: 120, spread: 80, origin: { x: 0, y: 0.6 } });
-        confetti({ particleCount: 120, spread: 80, origin: { x: 1, y: 0.6 } });
-      }
-    }
-
-    loadSavedState();
-  });
-</script>
-
-</body>
-</html>
