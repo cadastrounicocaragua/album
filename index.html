@@ -114,6 +114,31 @@
     margin-top: 5px;
   }
 
+  /* BANNER DE CELEBRAÇÃO */
+  .congrats-message {
+    display: none;
+    background: linear-gradient(135deg, #1A3A1E 0%, var(--green-dark) 100%);
+    border: 2px solid var(--gold);
+    color: var(--gold-light);
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    padding: 15px;
+    text-align: center;
+    border-radius: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 0 20px rgba(232,184,75,0.3);
+    animation: bannerPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  }
+
+  @keyframes bannerPop {
+    from { opacity: 0; transform: scale(0.9) translateY(-10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
   /* GRID */
   .sticker-grid {
     display: grid;
@@ -288,13 +313,19 @@
   </div>
 </div>
 
+<!-- Banner de Celebração (inicialmente escondido) -->
+<div class="congrats-message" id="congrats-banner">
+  🎉 PARABÉNS! Você completou o álbum do time! 🏆⚽
+</div>
+
 <div class="section-label">
   <div>Coleção Completa · 9 Figurinhas</div>
   <div class="counter-display">Coladas: <span id="pasted-count">0</span> / 9</div>
 </div>
 
 <div class="sticker-grid">
-  <div class="sticker-card" data-number="1">
+  <!-- FIGURINHA 1 -->
+  <div class="sticker-card" data-id="player_1" data-number="1">
     <div class="card-num">1</div>
     <div class="card-img-wrap">
       <img class="card-img" src="diego.jpg" alt="Diego" loading="lazy">
@@ -306,7 +337,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="2">
+  <!-- FIGURINHA 2 -->
+  <div class="sticker-card" data-id="player_2" data-number="2">
     <div class="card-num">2</div>
     <div class="card-img-wrap">
       <img class="card-img" src="fane.jpg" alt="Membro 2" loading="lazy">
@@ -318,7 +350,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="3">
+  <!-- FIGURINHA 3 -->
+  <div class="sticker-card" data-id="player_3" data-number="3">
     <div class="card-num">3</div>
     <div class="card-img-wrap">
       <img class="card-img" src="lucio.jpg" alt="Membro 3" loading="lazy">
@@ -330,7 +363,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="4">
+  <!-- FIGURINHA 4 -->
+  <div class="sticker-card" data-id="player_4" data-number="4">
     <div class="card-num">4</div>
     <div class="card-img-wrap">
       <img class="card-img" src="ramon.jpg" alt="Membro 4" loading="lazy">
@@ -342,7 +376,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="5">
+  <!-- FIGURINHA 5 -->
+  <div class="sticker-card" data-id="player_5" data-number="5">
     <div class="card-num">5</div>
     <div class="card-img-wrap">
       <img class="card-img" src="gustavo.png" alt="Membro 5" loading="lazy">
@@ -354,7 +389,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="6">
+  <!-- FIGURINHA 6 -->
+  <div class="sticker-card" data-id="player_6" data-number="6">
     <div class="card-num">6</div>
     <div class="card-img-wrap">
       <img class="card-img" src="cris.jpg" alt="Membro 6" loading="lazy">
@@ -366,7 +402,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="7">
+  <!-- FIGURINHA 7 -->
+  <div class="sticker-card" data-id="player_7" data-number="7">
     <div class="card-num">7</div>
     <div class="card-img-wrap">
       <img class="card-img" src="vera.jpg" alt="Membro 7" loading="lazy">
@@ -378,7 +415,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="8">
+  <!-- FIGURINHA 8 -->
+  <div class="sticker-card" data-id="player_8" data-number="8">
     <div class="card-num">8</div>
     <div class="card-img-wrap">
       <img class="card-img" src="eduardo.jpg" alt="Membro 8" loading="lazy">
@@ -390,7 +428,8 @@
     </div>
   </div>
 
-  <div class="sticker-card" data-number="9">
+  <!-- FIGURINHA 9 -->
+  <div class="sticker-card" data-id="player_9" data-number="9">
     <div class="card-num">9</div>
     <div class="card-img-wrap">
       <img class="card-img" src="laura.jpg" alt="Membro 9" loading="lazy">
@@ -408,24 +447,73 @@
   Sede da Gestão Cadastro Único/Conselhos · © 2026
 </div>
 
+<!-- Biblioteca Externa de Confetes -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.sticker-card');
     const counter = document.getElementById('pasted-count');
+    const banner = document.getElementById('congrats-banner');
     
-    // Função para atualizar o placar do topo
-    function updateCounter() {
-      const pastedCount = document.querySelectorAll('.sticker-card.pasted').length;
-      counter.textContent = pastedCount;
-    }
+    // 1. Recuperar o progresso do LocalStorage (Memória do Navegador)
+    cards.forEach(card => {
+      const id = card.getAttribute('data-id');
+      if (localStorage.getItem(id) === 'pasted') {
+        card.classList.add('pasted');
+      }
+    });
 
+    // Roda uma vez no início para ajustar o placar ao abrir a página
+    updateCounter(false);
+
+    // 2. Evento do clique para colar/descolar
     cards.forEach(card => {
       card.addEventListener('click', () => {
-        // Alterna a classe 'pasted' (cola ou descola)
         card.classList.toggle('pasted');
-        updateCounter();
+        
+        const id = card.getAttribute('data-id');
+        if (card.classList.contains('pasted')) {
+          localStorage.setItem(id, 'pasted');
+        } else {
+          localStorage.removeItem(id);
+        }
+        
+        // Atualiza e verifica se deve soltar confete
+        updateCounter(true);
       });
     });
+
+    // 3. Função para gerenciar o placar e ativar as comemorações
+    function updateCounter(shouldAnimate) {
+      const pastedCount = document.querySelectorAll('.sticker-card.pasted').length;
+      counter.textContent = pastedCount;
+      
+      if (pastedCount === 9) {
+        banner.style.display = 'block';
+        if (shouldAnimate) {
+          dispararAnimacaoConfete();
+        }
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    // 4. Configuração dos confetes (explosão nas duas laterais da tela)
+    function dispararAnimacaoConfete() {
+      // Lado esquerdo
+      confetti({
+        particleCount: 150,
+        spread: 85,
+        origin: { x: 0, y: 0.6 }
+      });
+      // Lado direito
+      confetti({
+        particleCount: 150,
+        spread: 85,
+        origin: { x: 1, y: 0.6 }
+      });
+    }
   });
 </script>
 
