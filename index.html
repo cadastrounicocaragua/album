@@ -171,8 +171,8 @@
   }
   
   /* Estado Inicial Oculto */
-  .sticker-card .card-img-wrap { filter: grayscale(100%) brightness(30%); opacity: 0.4; }
-  .sticker-card .card-body { opacity: 0.3; }
+  .sticker-card .card-img-wrap { filter: grayscale(100%) brightness(30%); opacity: 0.4; transition: all 0.4s ease; }
+  .sticker-card .card-body { opacity: 0.3; transition: all 0.4s ease; }
   
   .sticker-card::before {
     content: attr(data-number);
@@ -188,7 +188,7 @@
 
   /* Selo Disponível */
   .sticker-card.can-paste::after {
-    content: 'ABERTO';
+    content: 'DISPONÍVEL';
     position: absolute;
     top: 8px;
     right: 8px;
@@ -200,6 +200,12 @@
     padding: 2px 6px;
     border-radius: 4px;
     z-index: 3;
+    animation: pulseGlow 1.5s infinite alternate;
+  }
+
+  @keyframes pulseGlow {
+    from { box-shadow: 0 0 2px var(--green-light); }
+    to { box-shadow: 0 0 10px var(--green-light); }
   }
 
   .card-num {
@@ -314,3 +320,65 @@
 </div>
 
 <div class="album-footer">Sede da Gestão Cadastro Único/Conselhos · © 2026</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.sticker-card');
+    const counter = document.getElementById('pasted-count');
+    const banner = document.getElementById('congrats-banner');
+    const openPackBtn = document.getElementById('open-pack-btn');
+    const packResults = document.getElementById('pack-results');
+    
+    const namesMapping = {
+      "1": "Diego", "2": "Cris Fane", "3": "Lúcio", "4": "Ramon",
+      "5": "Gustavo", "6": "Cris Porfírio", "7": "Vera", "8": "Eduardo", "9": "Laura"
+    };
+
+    // Inicializa os storages vazios se não existirem
+    if(!localStorage.getItem('pasted_stickers')) localStorage.setItem('pasted_stickers', JSON.stringify([]));
+    if(!localStorage.getItem('owned_inventory')) localStorage.setItem('owned_inventory', JSON.stringify([]));
+
+    function getStorageData(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
+    }
+
+    function loadSavedState() {
+      const pasted = getStorageData('pasted_stickers');
+      const owned = getStorageData('owned_inventory');
+
+      cards.forEach(card => {
+        const num = card.getAttribute('data-number');
+        if (pasted.includes(num)) {
+          card.classList.add('pasted');
+        } else if (owned.includes(num)) {
+          card.classList.add('can-paste');
+        }
+      });
+      updateCounterDisplay();
+    }
+
+    // Gerenciador do botão "Abrir Pacotinho"
+    openPackBtn.addEventListener('click', () => {
+      packResults.innerHTML = '';
+      let owned = getStorageData('owned_inventory');
+      const pasted = getStorageData('pasted_stickers');
+
+      for (let i = 0; i < 3; i++) {
+        const randomNum = Math.floor(Math.random() * 9) + 1;
+        const numStr = randomNum.toString();
+
+        if (!owned.includes(numStr)) {
+          owned.push(numStr);
+        }
+
+        const miniCard = document.createElement('div');
+        miniCard.className = 'mini-sticker';
+        
+        let statusText = pasted.includes(numStr) ? '<span>(Repetida)</span>' : '<span>(Disponível)</span>';
+        miniCard.innerHTML = `Nº ${numStr} <div>${namesMapping[numStr]}</div> ${statusText}`;
+        packResults.appendChild(miniCard);
+
+        const targetCard = document.querySelector(`[data-number="${numStr}"]`);
+        if (targetCard && !targetCard
