@@ -375,3 +375,244 @@
     <div class="card-img-wrap"><img class="card-img" src="ramon.jpg" alt="Ramon"></div>
     <div class="card-body"><div class="card-name">Ramon</div><div class="card-role">Volante</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <div class="sticker-card" data-number="5" data-name="Gustavo">
+    <div class="card-num">5</div>
+    <div class="card-img-wrap"><img class="card-img" src="gustavo.png" alt="Gustavo"></div>
+    <div class="card-body"><div class="card-name">Gustavo</div><div class="card-role">Meia-Armador</div><div class="card-stars">★★★★★</div></div>
+  </div>
+  <div class="sticker-card" data-number="6" data-name="Cris Porfírio">
+    <div class="card-num">6</div>
+    <div class="card-img-wrap"><img class="card-img" src="cris.jpg" alt="Cris Porfírio"></div>
+    <div class="card-body"><div class="card-name">Cris Porfírio</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
+  </div>
+  <div class="sticker-card" data-number="7" data-name="Vera">
+    <div class="card-num">7</div>
+    <div class="card-img-wrap"><img class="card-img" src="vera.jpg" alt="Vera"></div>
+    <div class="card-body"><div class="card-name">Vera</div><div class="card-role">Ponta Esquerda</div><div class="card-stars">★★★★★</div></div>
+  </div>
+  <div class="sticker-card" data-number="8" data-name="Eduardo">
+    <div class="card-num">8</div>
+    <div class="card-img-wrap"><img class="card-img" src="eduardo.jpg" alt="Eduardo"></div>
+    <div class="card-body"><div class="card-name">Eduardo</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
+  </div>
+  <div class="sticker-card" data-number="9" data-name="Laura">
+    <div class="card-num">9</div>
+    <div class="card-img-wrap"><img class="card-img" src="laura.jpg" alt="Laura"></div>
+    <div class="card-body"><div class="card-name">Laura</div><div class="card-role">Ponta Direita</div><div class="card-stars">★★★★★</div></div>
+  </div>
+</div>
+
+<div class="album-footer">Sede da Gestão Cadastro Único/Conselhos · © 2026</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.sticker-card');
+    const counter = document.getElementById('pasted-count');
+    const banner = document.getElementById('congrats-banner');
+    const openPackBtn = document.getElementById('open-pack-btn');
+    const packResults = document.getElementById('pack-results');
+    const packGraphic = document.getElementById('pack-graphic');
+    
+    const namesMapping = {
+      "1": "Diego", "2": "Cris Fane", "3": "Lúcio", "4": "Ramon",
+      "5": "Gustavo", "6": "Cris Porfírio", "7": "Vera", "8": "Eduardo", "9": "Laura"
+    };
+
+    // Motores de som nativos do navegador (Web Audio API)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'rip') {
+        // Som de rasgo (Frequência caindo rápido + Ruído)
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'new') {
+        // Som de "Plim!" Cristalino para figurinha nova
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08); // A5
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+      } else if (type === 'paste') {
+        // Som seco de colagem (frequência baixa rápida)
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+      } else if (type === 'victory') {
+        // Fanfarra triunfal de encerramento
+        const notas = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+        notas.forEach((freq, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g); g.connect(audioCtx.destination);
+          o.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.12));
+          g.gain.setValueAtTime(0.1, audioCtx.currentTime + (idx * 0.12));
+          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (idx * 0.12) + 0.4);
+          o.start(audioCtx.currentTime + (idx * 0.12));
+          o.stop(audioCtx.currentTime + (idx * 0.12) + 0.4);
+        });
+      }
+    }
+
+    if(!localStorage.getItem('pasted_stickers')) localStorage.setItem('pasted_stickers', JSON.stringify([]));
+    if(!localStorage.getItem('owned_inventory')) localStorage.setItem('owned_inventory', JSON.stringify([]));
+
+    function getStorageData(key) {
+      try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; }
+    }
+
+    function loadSavedState() {
+      const pasted = getStorageData('pasted_stickers');
+      const owned = getStorageData('owned_inventory');
+
+      cards.forEach(card => {
+        const num = card.getAttribute('data-number');
+        if (pasted.includes(num)) {
+          card.classList.add('pasted');
+        } else if (owned.includes(num)) {
+          card.classList.add('can-paste');
+        }
+      });
+      updateCounterDisplay();
+    }
+
+    // Gerenciador do botão "Abrir Pacotinho" com animações e sons intercalados
+    openPackBtn.addEventListener('click', () => {
+      openPackBtn.disabled = true;
+      packResults.innerHTML = '';
+      
+      // Inicia tremor do pacotinho
+      packGraphic.className = 'pack-container shaking';
+      
+      // Janela de suspense (400ms tremendo)
+      setTimeout(() => {
+        // Entra no estado de rasgar
+        packGraphic.className = 'pack-container ripping';
+        playSound('rip');
+
+        // Mostra os resultados após o rasgo completar
+        setTimeout(() => {
+          packGraphic.className = 'pack-container'; // Reseta layout do pacote
+          let owned = getStorageData('owned_inventory');
+          const pasted = getStorageData('pasted_stickers');
+          let temNovaNoPacote = false;
+
+          for (let i = 0; i < 3; i++) {
+            const randomNum = Math.floor(Math.random() * 9) + 1;
+            const numStr = randomNum.toString();
+
+            if (!owned.includes(numStr)) {
+              owned.push(numStr);
+            }
+
+            const miniCard = document.createElement('div');
+            const jaColada = pasted.includes(numStr);
+            
+            if (!jaColada) temNovaNoPacote = true;
+
+            miniCard.className = `mini-sticker ${!jaColada ? 'is-new' : ''}`;
+            miniCard.style.animationDelay = `${i * 150}ms`; // Cascata visual
+            
+            let statusText = jaColada ? '<span>(Repetida)</span>' : '<span>(Nova!)</span>';
+            miniCard.innerHTML = `Nº ${numStr} <div>${namesMapping[numStr]}</div> ${statusText}`;
+            packResults.appendChild(miniCard);
+
+            const targetCard = document.querySelector(`[data-number="${numStr}"]`);
+            if (targetCard && !targetCard.classList.contains('pasted')) {
+              targetCard.classList.add('can-paste');
+            }
+          }
+
+          localStorage.setItem('owned_inventory', JSON.stringify(owned));
+          
+          // Feedback de som das cartas puxadas
+          if(temNovaNoPacote) {
+            setTimeout(() => playSound('new'), 150);
+          }
+
+          openPackBtn.disabled = false;
+        }, 500);
+
+      }, 500);
+    });
+
+    // Clique nas figurinhas do álbum
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const num = card.getAttribute('data-number');
+        const name = card.getAttribute('data-name');
+        let pasted = getStorageData('pasted_stickers');
+        let owned = getStorageData('owned_inventory');
+
+        if (card.classList.contains('pasted')) {
+          card.classList.remove('pasted');
+          card.classList.add('can-paste');
+          
+          pasted = pasted.filter(n => n !== num);
+          if(!owned.includes(num)) owned.push(num);
+          
+          localStorage.setItem('pasted_stickers', JSON.stringify(pasted));
+          localStorage.setItem('owned_inventory', JSON.stringify(owned));
+          updateCounterDisplay();
+          return;
+        }
+
+        if (owned.includes(num) || card.classList.contains('can-paste')) {
+          playSound('paste');
+          card.classList.remove('can-paste');
+          card.classList.add('pasted');
+          
+          if(!pasted.includes(num)) pasted.push(num);
+          owned = owned.filter(n => n !== num);
+
+          localStorage.setItem('pasted_stickers', JSON.stringify(pasted));
+          localStorage.setItem('owned_inventory', JSON.stringify(owned));
+          
+          updateCounterDisplay();
+          dispararConfeteSeCompleto();
+        } else {
+          alert(`Você não tem a figurinha do(a) ${name}. Clique em "Abrir Pacotinho" no topo!`);
+        }
+      });
+    });
+
+    function updateCounterDisplay() {
+      const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
+      counter.textContent = totalPasted;
+      banner.style.display = (totalPasted === 9) ? 'block' : 'none';
+    }
+
+    function dispararConfeteSeCompleto() {
+      const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
+      if (totalPasted === 9) {
+        playSound('victory');
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 150, spread: 85, origin: { x: 0, y: 0.6 } });
+          confetti({ particleCount: 150, spread: 85, origin: { x: 1, y: 0.6 } });
+        }
+      }
+    }
+
+    loadSavedState();
+  });
+</script>
+
+</body>
+</html>
