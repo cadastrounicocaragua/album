@@ -76,8 +76,6 @@
     align-items: center;
     gap: 15px;
   }
-
-  /* O PACOTE DE FIGURINHAS FISICO */
   .pack-container {
     position: relative;
     width: 140px;
@@ -100,45 +98,18 @@
     align-items: center;
     overflow: hidden;
   }
-  .pack-wrapper::before {
-    content: 'COPA 2026';
-    font-family: 'Bebas Neue', sans-serif;
-    color: var(--gold);
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
-  .pack-wrapper::after {
-    content: '⚽ GESTÃO ⚽';
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 11px;
-    color: var(--white);
-    margin-top: 5px;
-    opacity: 0.8;
-  }
+  .pack-wrapper::before { content: 'COPA 2026'; font-family: 'Bebas Neue', sans-serif; color: var(--gold); font-size: 20px; letter-spacing: 1px; }
+  .pack-wrapper::after { content: '⚽ GESTÃO ⚽'; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 11px; color: var(--white); margin-top: 5px; opacity: 0.8; }
 
-  /* Animação de tremor do pacote */
-  .pack-container.shaking .pack-wrapper {
-    animation: shakePack 0.5s infinite;
-  }
+  .pack-container.shaking .pack-wrapper { animation: shakePack 0.5s infinite; }
   @keyframes shakePack {
     0% { transform: translate(2px, 1px) rotate(0deg); }
     10% { transform: translate(-1px, -2px) rotate(-1deg); }
     20% { transform: translate(-3px, 0px) rotate(1deg); }
     30% { transform: translate(0px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(2px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(2px, 2px) rotate(0deg); }
     100% { transform: translate(1px, -2px) rotate(-1deg); }
   }
-
-  /* Animação de Rasgar / Sumir */
-  .pack-container.ripping .pack-wrapper {
-    animation: ripPack 0.6s forwards ease-in;
-  }
+  .pack-container.ripping .pack-wrapper { animation: ripPack 0.6s forwards ease-in; }
   @keyframes ripPack {
     0% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.1) translateY(-10px); filter: brightness(1.5); }
@@ -161,15 +132,7 @@
   .pack-btn:hover { transform: scale(1.03); }
   .pack-btn:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
 
-  .pack-opened-display {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 5px;
-    min-height: 60px;
-    width: 100%;
-  }
+  .pack-opened-display { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 5px; width: 100%; }
   .mini-sticker {
     background: var(--card-bg);
     border: 1px solid var(--gold);
@@ -179,67 +142,26 @@
     font-weight: 700;
     font-size: 14px;
     color: var(--white);
-    min-width: 100px;
+    min-width: 110px;
     text-align: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     opacity: 0;
     transform: translateY(15px);
     animation: revealMini 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  @keyframes revealMini {
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes revealMini { to { opacity: 1; transform: translateY(0); } }
   .mini-sticker span { display: block; color: var(--gold); font-size: 11px; margin-top: 2px; }
-  .mini-sticker.is-new span { color: #1A9B5A; font-weight: bold; }
-
-  /* BANNER DE PARABÉNS */
-  .congrats-message {
-    display: none;
-    background: linear-gradient(135deg, #1A3A1E 0%, var(--green-dark) 100%);
-    border: 2px solid var(--gold);
-    color: var(--gold-light);
-    max-width: 800px;
-    margin: 0 auto 1.5rem;
-    padding: 15px;
-    text-align: center;
-    border-radius: 12px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    box-shadow: 0 0 20px rgba(232,184,75,0.3);
-  }
+  
+  /* Estilo do mini card do Gustavo Lendário */
+  .mini-sticker.is-legendary { border-color: #ff3366; background: linear-gradient(45deg, #201015, #101e12); box-shadow: 0 0 10px rgba(255,51,102,0.5); }
+  .mini-sticker.is-legendary span { color: #ff3366; font-weight: bold; }
 
   /* PLACARD CONTADOR */
-  .section-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 1.25rem;
-  }
-  .counter-display {
-    font-size: 14px;
-    color: var(--white);
-    background: rgba(232, 184, 75, 0.1);
-    padding: 4px 12px;
-    border-radius: 4px;
-    border: 1px dashed var(--gold);
-    display: inline-block;
-    margin-top: 5px;
-  }
+  .section-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; text-align: center; margin-bottom: 1.25rem; }
+  .counter-display { font-size: 14px; color: var(--white); background: rgba(232, 184, 75, 0.1); padding: 4px 12px; border-radius: 4px; border: 1px dashed var(--gold); display: inline-block; margin-top: 5px; }
 
   /* GRID DE FIGURINHAS */
-  .sticker-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
+  .sticker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 800px; margin: 0 auto; }
   .sticker-card {
     background: var(--card-bg);
     border: 1.5px solid rgba(232,184,75,0.15);
@@ -250,60 +172,22 @@
     cursor: pointer;
   }
   
-  /* Estado Inicial Oculto */
   .sticker-card .card-img-wrap { filter: grayscale(100%) brightness(30%); opacity: 0.4; transition: all 0.4s ease; }
   .sticker-card .card-body { opacity: 0.3; transition: all 0.4s ease; }
-  
   .sticker-card::before {
-    content: attr(data-number);
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-    color: rgba(232,184,75,0.15);
-    z-index: 1;
+    content: attr(data-number); position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 8vw, 4.5rem); color: rgba(232,184,75,0.15); z-index: 1;
   }
 
   /* Selo Disponível */
   .sticker-card.can-paste::after {
-    content: 'DISPONÍVEL';
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--green-light);
-    color: white;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    z-index: 3;
+    content: 'DISPONÍVEL'; position: absolute; top: 8px; right: 8px; background: var(--green-light); color: white;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; z-index: 3;
     animation: pulseGlow 1.5s infinite alternate;
   }
+  @keyframes pulseGlow { from { box-shadow: 0 0 2px var(--green-light); } to { box-shadow: 0 0 10px var(--green-light); } }
 
-  @keyframes pulseGlow {
-    from { box-shadow: 0 0 2px var(--green-light); }
-    to { box-shadow: 0 0 10px var(--green-light); }
-  }
-
-  .card-num {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 13px;
-    color: var(--green-dark);
-    background: var(--gold);
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-  }
+  .card-num { position: absolute; top: 8px; left: 8px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; color: var(--green-dark); background: var(--gold); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
   .card-img-wrap { width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; background: var(--green-dark); }
   .card-img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 55%, rgba(10,26,14,0.85) 100%); }
   .card-img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -317,15 +201,68 @@
   .sticker-card.pasted .card-img-wrap { filter: grayscale(0%) brightness(100%); opacity: 1; }
   .sticker-card.pasted .card-body { opacity: 1; }
   .sticker-card.pasted { border-color: rgba(232,184,75,0.6); animation: pasteAnimation 0.4s forwards; }
+  @keyframes pasteAnimation { 0% { transform: scale(1.05); } 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.4); } }
+
+  /* EFEITO LENDÁRIO / HOLOGRÁFICO FIXO DO GUSTAVO (CROMO BRILHANTE) */
+  .sticker-card.is-legendary-card {
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, #ffe066, #f53b57, #00d2d3, #ffe066) 1;
+    animation: goldGlow 3s infinite alternate;
+  }
+  .sticker-card.is-legendary-card.pasted::after {
+    content: '⭐ LENDÁRIA ⭐'; position: absolute; bottom: 55px; right: 8px; background: linear-gradient(45deg, #b8860b, #ffe066);
+    color: #0c1a0e; font-family: 'Barlow Condensed', sans-serif; font-size: 9px; font-weight: bold; padding: 1px 5px; border-radius: 3px; z-index: 4;
+  }
+  /* Camada de brilho arco-íris móvel (Glare) */
+  .sticker-card.is-legendary-card .card-img-wrap::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(125deg, rgba(255,255,255,0) 30%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0.25) 55%, rgba(255,255,255,0) 70%);
+    background-size: 200% 200%; background-position: 0% 0%;
+    z-index: 2; pointer-events: none; transition: background-position 0.5s;
+  }
+  .sticker-card.is-legendary-card:hover .card-img-wrap::before {
+    background-position: 100% 100%;
+  }
+  @keyframes goldGlow { from { box-shadow: 0 0 5px rgba(232,184,75,0.3); } to { box-shadow: 0 0 20px rgba(232,184,75,0.7); } }
+
+
+  /* TELA MODAL DO CERTIFICADO DE CAMPEÃO */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999;
+    align-items: center; justify-content: center; padding: 20px; overflow-y: auto;
+  }
+  .modal-content {
+    background: #0f2613; border: 3px solid var(--gold); border-radius: 16px;
+    max-width: 650px; width: 100%; padding: 30px; text-align: center; box-shadow: 0 0 40px rgba(232,184,75,0.4);
+  }
+  .modal-content h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 10px; }
+  .modal-content p { font-size: 1rem; margin-bottom: 20px; color: #f8f4e8; }
   
-  @keyframes pasteAnimation {
-    0% { transform: scale(1.05); }
-    100% { transform: scale(1); box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+  .name-input {
+    width: 80%; max-width: 300px; padding: 10px; font-size: 16px; border: 2px solid var(--gold);
+    border-radius: 6px; background: #051408; color: white; text-align: center; font-family: 'Barlow', sans-serif;
+    margin-bottom: 20px; text-transform: uppercase;
+  }
+  .modal-btn {
+    font-family: 'Bebas Neue', sans-serif; background: var(--gold); color: #000;
+    font-size: 1.2rem; padding: 10px 25px; border: none; border-radius: 6px; cursor: pointer;
   }
 
-  @media (max-width: 500px) {
-    .sticker-grid { gap: 8px; }
+  /* DESIGN DO CERTIFICADO OFICIAL */
+  .certificate-box {
+    display: none; background: #fdfbf7; color: #111; padding: 35px 25px; border-radius: 8px;
+    border: 12px double #b8860b; position: relative; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
   }
+  .cert-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; color: #0a6b3d; letter-spacing: 1px; }
+  .cert-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; color: #b8860b; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 25px; }
+  .cert-text { font-size: 16px; font-style: italic; color: #444; line-height: 1.6; }
+  .cert-name { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: #111; border-bottom: 2px dashed #b8860b; display: inline-block; padding: 5px 30px; margin: 15px 0; letter-spacing: 1px; }
+  .cert-footer { font-size: 11px; color: #666; margin-top: 30px; text-transform: uppercase; font-weight: bold; }
+  .cert-stamp { font-size: 45px; position: absolute; bottom: 20px; right: 30px; opacity: 0.85; transform: rotate(-10deg); }
+
+  .hint-print { font-size: 12px; color: #ffe066; margin-top: 15px; display: none; font-weight: bold; }
+
+  @media (max-width: 500px) { .sticker-grid { gap: 8px; } .certificate-box { border: 6px double #b8860b; padding: 20px 10px; } }
 </style>
 </head>
 <body>
@@ -337,6 +274,7 @@
   </div>
 </div>
 
+<!-- CONTAINER DO PACOTINHO INTEGRADO -->
 <div class="pack-section">
   <div class="pack-container" id="pack-graphic">
     <div class="pack-wrapper"></div>
@@ -345,60 +283,90 @@
   <div class="pack-opened-display" id="pack-results"></div>
 </div>
 
-<div class="congrats-message" id="congrats-banner">
-  🎉 PARABÉNS! Você completou o álbum do time! 🏆⚽
-</div>
-
 <div class="section-label">
   <div>Coleção Completa · 9 Figurinhas</div>
   <div class="counter-display">Coladas: <span id="pasted-count">0</span> / 9</div>
 </div>
 
 <div class="sticker-grid">
+  <!-- 1 -->
   <div class="sticker-card" data-number="1" data-name="Diego">
     <div class="card-num">1</div>
     <div class="card-img-wrap"><img class="card-img" src="diego.jpg" alt="Diego"></div>
     <div class="card-body"><div class="card-name">Diego</div><div class="card-role">Goleiro</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 2 -->
   <div class="sticker-card" data-number="2" data-name="Cris Fane">
     <div class="card-num">2</div>
     <div class="card-img-wrap"><img class="card-img" src="fane.jpg" alt="Cris Fane"></div>
     <div class="card-body"><div class="card-name">Cris Fane</div><div class="card-role">Zagueira</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 3 -->
   <div class="sticker-card" data-number="3" data-name="Lúcio">
     <div class="card-num">3</div>
     <div class="card-img-wrap"><img class="card-img" src="lucio.jpg" alt="Lúcio"></div>
     <div class="card-body"><div class="card-name">Lúcio</div><div class="card-role">Lateral Direito</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 4 -->
   <div class="sticker-card" data-number="4" data-name="Ramon">
     <div class="card-num">4</div>
     <div class="card-img-wrap"><img class="card-img" src="ramon.jpg" alt="Ramon"></div>
     <div class="card-body"><div class="card-name">Ramon</div><div class="card-role">Volante</div><div class="card-stars">★★★★★</div></div>
   </div>
-  <div class="sticker-card" data-number="5" data-name="Gustavo">
+  <!-- 5 - GUSTAVO LENDÁRIO -->
+  <div class="sticker-card is-legendary-card" data-number="5" data-name="Gustavo">
     <div class="card-num">5</div>
     <div class="card-img-wrap"><img class="card-img" src="gustavo.png" alt="Gustavo"></div>
     <div class="card-body"><div class="card-name">Gustavo</div><div class="card-role">Meia-Armador</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 6 -->
   <div class="sticker-card" data-number="6" data-name="Cris Porfírio">
     <div class="card-num">6</div>
     <div class="card-img-wrap"><img class="card-img" src="cris.jpg" alt="Cris Porfírio"></div>
     <div class="card-body"><div class="card-name">Cris Porfírio</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 7 -->
   <div class="sticker-card" data-number="7" data-name="Vera">
     <div class="card-num">7</div>
     <div class="card-img-wrap"><img class="card-img" src="vera.jpg" alt="Vera"></div>
     <div class="card-body"><div class="card-name">Vera</div><div class="card-role">Ponta Esquerda</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 8 -->
   <div class="sticker-card" data-number="8" data-name="Eduardo">
     <div class="card-num">8</div>
     <div class="card-img-wrap"><img class="card-img" src="eduardo.jpg" alt="Eduardo"></div>
     <div class="card-body"><div class="card-name">Eduardo</div><div class="card-role">Atacante</div><div class="card-stars">★★★★★</div></div>
   </div>
+  <!-- 9 -->
   <div class="sticker-card" data-number="9" data-name="Laura">
     <div class="card-num">9</div>
     <div class="card-img-wrap"><img class="card-img" src="laura.jpg" alt="Laura"></div>
     <div class="card-body"><div class="card-name">Laura</div><div class="card-role">Ponta Direita</div><div class="card-stars">★★★★★</div></div>
+  </div>
+</div>
+
+<!-- TELA POPUP DE CERTIFICADO -->
+<div class="modal-overlay" id="cert-modal">
+  <div class="modal-content">
+    <h2>🏆 ÁLBUM COMPLETO! 🏆</h2>
+    <p>Você provou ser o torcedor nº 1 da Gestão do Cadastro Único! Digite seu nome abaixo para emitir sua honraria de campeão:</p>
+    
+    <input type="text" class="name-input" id="user-name" placeholder="Seu Nome Completo" maxlength="30">
+    <br>
+    <button class="modal-btn" id="generate-btn">GERAR MEU CERTIFICADO</button>
+
+    <!-- O CERTIFICADO EM SI -->
+    <div class="certificate-box" id="cert-box">
+      <div class="cert-title">Certificado de Campeão</div>
+      <div class="cert-sub">Álbum Oficial da Sede CadÚnico & Conselhos</div>
+      <div class="cert-text">Certificamos com orgulho e mérito desportivo que</div>
+      <div class="cert-name" id="cert-display-name">NOME DO CAMPEÃO</div>
+      <div class="cert-text">abriu todos os pacotinhos necessários, superou as repetidas e colou com sucesso todas as 9 figurinhas do Time do Coração incluindo a lendária joia do meio-campo.</div>
+      <div class="cert-stamp">🏆🥇</div>
+      <div class="cert-footer">Emissão Oficial Autenticada · © 2026</div>
+    </div>
+    
+    <div class="hint-print" id="hint-print">📸 Tire um print do seu certificado e mande no grupo da secretaria!</div>
   </div>
 </div>
 
@@ -410,29 +378,31 @@
   document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.sticker-card');
     const counter = document.getElementById('pasted-count');
-    const banner = document.getElementById('congrats-banner');
     const openPackBtn = document.getElementById('open-pack-btn');
     const packResults = document.getElementById('pack-results');
     const packGraphic = document.getElementById('pack-graphic');
+    
+    const certModal = document.getElementById('cert-modal');
+    const userNameInput = document.getElementById('user-name');
+    const generateBtn = document.getElementById('generate-btn');
+    const certBox = document.getElementById('cert-box');
+    const certDisplayName = document.getElementById('cert-display-name');
+    const hintPrint = document.getElementById('hint-print');
     
     const namesMapping = {
       "1": "Diego", "2": "Cris Fane", "3": "Lúcio", "4": "Ramon",
       "5": "Gustavo", "6": "Cris Porfírio", "7": "Vera", "8": "Eduardo", "9": "Laura"
     };
 
-    // Motores de som nativos do navegador (Web Audio API)
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc.connect(gain); gain.connect(audioCtx.destination);
 
       if (type === 'rip') {
-        // Som de rasgo (Frequência caindo rápido + Ruído)
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(300, audioCtx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(60, audioCtx.currentTime + 0.3);
@@ -440,33 +410,36 @@
         gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
         osc.start(); osc.stop(audioCtx.currentTime + 0.3);
       } else if (type === 'new') {
-        // Som de "Plim!" Cristalino para figurinha nova
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08); // A5
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.08);
         gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
         osc.start(); osc.stop(audioCtx.currentTime + 0.4);
       } else if (type === 'paste') {
-        // Som seco de colagem (frequência baixa rápida)
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(180, audioCtx.currentTime);
         osc.frequency.linearRampToValueAtTime(90, audioCtx.currentTime + 0.08);
         gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
         gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.08);
         osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+      } else if (type === 'legendary') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.5);
       } else if (type === 'victory') {
-        // Fanfarra triunfal de encerramento
-        const notas = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+        const notas = [261.63, 329.63, 392.00, 523.25, 659.25];
         notas.forEach((freq, idx) => {
           const o = audioCtx.createOscillator();
           const g = audioCtx.createGain();
           o.connect(g); g.connect(audioCtx.destination);
-          o.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.12));
-          g.gain.setValueAtTime(0.1, audioCtx.currentTime + (idx * 0.12));
-          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (idx * 0.12) + 0.4);
-          o.start(audioCtx.currentTime + (idx * 0.12));
-          o.stop(audioCtx.currentTime + (idx * 0.12) + 0.4);
+          o.frequency.setValueAtTime(freq, audioCtx.currentTime + (idx * 0.1));
+          g.gain.setValueAtTime(0.12, audioCtx.currentTime + (idx * 0.1));
+          g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (idx * 0.1) + 0.5);
+          o.start(audioCtx.currentTime + (idx * 0.1)); o.stop(audioCtx.currentTime + (idx * 0.1) + 0.5);
         });
       }
     }
@@ -491,28 +464,26 @@
         }
       });
       updateCounterDisplay();
+      verificarAlbumCompletoSemSom();
     }
 
-    // Gerenciador do botão "Abrir Pacotinho" com animações e sons intercalados
+    // ABRIR PACOTINHO
     openPackBtn.addEventListener('click', () => {
       openPackBtn.disabled = true;
       packResults.innerHTML = '';
-      
-      // Inicia tremor do pacotinho
       packGraphic.className = 'pack-container shaking';
       
-      // Janela de suspense (400ms tremendo)
       setTimeout(() => {
-        // Entra no estado de rasgar
         packGraphic.className = 'pack-container ripping';
         playSound('rip');
 
-        // Mostra os resultados após o rasgo completar
         setTimeout(() => {
-          packGraphic.className = 'pack-container'; // Reseta layout do pacote
+          packGraphic.className = 'pack-container'; 
           let owned = getStorageData('owned_inventory');
           const pasted = getStorageData('pasted_stickers');
-          let temNovaNoPacote = false;
+          
+          let tirouGustavoLendario = false;
+          let tirouNova = false;
 
           for (let i = 0; i < 3; i++) {
             const randomNum = Math.floor(Math.random() * 9) + 1;
@@ -524,13 +495,15 @@
 
             const miniCard = document.createElement('div');
             const jaColada = pasted.includes(numStr);
+            const eGustavo = (numStr === "5");
             
-            if (!jaColada) temNovaNoPacote = true;
+            if (!jaColada) tirouNova = true;
+            if (eGustavo) tirouGustavoLendario = true;
 
-            miniCard.className = `mini-sticker ${!jaColada ? 'is-new' : ''}`;
-            miniCard.style.animationDelay = `${i * 150}ms`; // Cascata visual
+            miniCard.className = `mini-sticker ${eGustavo ? 'is-legendary' : ''}`;
+            miniCard.style.animationDelay = `${i * 150}ms`;
             
-            let statusText = jaColada ? '<span>(Repetida)</span>' : '<span>(Nova!)</span>';
+            let statusText = eGustavo ? '<span>⭐ LENDÁRIA ⭐</span>' : (jaColada ? '<span>(Repetida)</span>' : '<span>(Nova!)</span>');
             miniCard.innerHTML = `Nº ${numStr} <div>${namesMapping[numStr]}</div> ${statusText}`;
             packResults.appendChild(miniCard);
 
@@ -542,18 +515,18 @@
 
           localStorage.setItem('owned_inventory', JSON.stringify(owned));
           
-          // Feedback de som das cartas puxadas
-          if(temNovaNoPacote) {
+          if (tirouGustavoLendario) {
+            setTimeout(() => playSound('legendary'), 200);
+          } else if (tirouNova) {
             setTimeout(() => playSound('new'), 150);
           }
 
           openPackBtn.disabled = false;
         }, 500);
-
       }, 500);
     });
 
-    // Clique nas figurinhas do álbum
+    // CLIQUE NAS FIGURINHAS
     cards.forEach(card => {
       card.addEventListener('click', () => {
         const num = card.getAttribute('data-number');
@@ -586,7 +559,7 @@
           localStorage.setItem('owned_inventory', JSON.stringify(owned));
           
           updateCounterDisplay();
-          dispararConfeteSeCompleto();
+          dispararConfeteEModalSeCompleto();
         } else {
           alert(`Você não tem a figurinha do(a) ${name}. Clique em "Abrir Pacotinho" no topo!`);
         }
@@ -596,19 +569,46 @@
     function updateCounterDisplay() {
       const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
       counter.textContent = totalPasted;
-      banner.style.display = (totalPasted === 9) ? 'block' : 'none';
     }
 
-    function dispararConfeteSeCompleto() {
+    function verificarAlbumCompletoSemSom() {
+      const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
+      if (totalPasted === 9) {
+        certModal.style.display = 'flex';
+      }
+    }
+
+    function dispararConfeteEModalSeCompleto() {
       const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
       if (totalPasted === 9) {
         playSound('victory');
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 150, spread: 85, origin: { x: 0, y: 0.6 } });
-          confetti({ particleCount: 150, spread: 85, origin: { x: 1, y: 0.6 } });
-        }
+        let duracao = 3 * 1000;
+        let fim = Date.now() + duracao;
+
+        (function frame() {
+          confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.6 } });
+          confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
+          if (Date.now() < fim) { requestAnimationFrame(frame); }
+          else { certModal.style.display = 'flex'; }
+        }());
       }
     }
+
+    // BOTÃO GERAR CERTIFICADO
+    generateBtn.addEventListener('click', () => {
+      const nomeDigitado = userNameInput.value.trim();
+      if(nomeDigitado === "") {
+        alert("Por favor, digite o seu nome para o certificado!");
+        return;
+      }
+      certDisplayName.textContent = nomeDigitado.toUpperCase();
+      userNameInput.style.display = 'none';
+      generateBtn.style.display = 'none';
+      certBox.style.display = 'block';
+      hintPrint.style.display = 'block';
+      
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.5 } });
+    });
 
     loadSavedState();
   });
