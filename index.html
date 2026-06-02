@@ -26,6 +26,32 @@
     padding: 2rem 1rem 3rem;
   }
 
+  /* BOTÃO DE MÚSICA FIXO */
+  .audio-control-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: var(--card-bg);
+    border: 2px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+  .audio-control-btn:hover {
+    transform: scale(1.05);
+    background: var(--green-dark);
+  }
+
   /* HEADER */
   .album-header {
     text-align: center;
@@ -190,7 +216,7 @@
   .card-body { padding: 8px 10px 10px; border-top: 1px solid rgba(232,184,75,0.12); }
   .card-name { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(0.82rem, 2.4vw, 1rem); font-weight: 700; color: var(--white); text-transform: uppercase; }
   .card-role { font-size: clamp(0.65rem, 1.8vw, 0.72rem); color: var(--gold); margin-top: 2px; }
-  .card-stars font-size: 9px; color: var(--gold); margin-top: 4px; }
+  .card-stars { font-size: 9px; color: var(--gold); margin-top: 4px; }
 
   /* ESTADO: COLADA */
   .sticker-card.pasted::before, .sticker-card.pasted::after { display: none !important; }
@@ -260,6 +286,14 @@
 </style>
 </head>
 <body>
+
+<!-- BOTÃO DE CONTROLE DA MÚSICA -->
+<button class="audio-control-btn" id="bg-music-toggle">🔊 MÚSICA: OFF</button>
+
+<!-- SEU ARQUIVO LOCAL APONTADO AQUI (Mude para Blur.mp3 ou Blur.wav dependendo do seu arquivo) -->
+<audio id="bg-music" loop>
+  <source src="Blur.mp3" type="audio/mp3">
+</audio>
 
 <div class="album-header">
   <div class="header-inner">
@@ -349,7 +383,7 @@
     <br>
     <button class="modal-btn" id="generate-btn">GERAR MEU CERTIFICADO</button>
 
-    <!-- O CERTIFICADO (SERÁ CONVERTIDO EM IMAGEM) -->
+    <!-- O CERTIFICADO -->
     <div class="certificate-box" id="cert-box">
       <div class="cert-title">Certificado de Campeão</div>
       <div class="cert-sub">Álbum Oficial da Sede CadÚnico & Conselhos</div>
@@ -369,7 +403,7 @@
 
 <div class="album-footer">Sede da Gestão Cadastro Único/Conselhos · © 2026</div>
 
-<!-- BIBLIOTECAS EXTERNAS (CONFETE + CONVERSOR PARA IMAGEM) -->
+<!-- BIBLIOTECAS EXTERNAS -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
@@ -391,6 +425,11 @@
     const closeModalBtn = document.getElementById('close-modal-btn');
     const modalHeadline = document.getElementById('modal-headline');
     const modalLead = document.getElementById('modal-lead');
+
+    // ELEMENTOS DE MÚSICA
+    const bgMusic = document.getElementById('bg-music');
+    const musicToggleBtn = document.getElementById('bg-music-toggle');
+    bgMusic.volume = 0.35; // Volume confortável de fundo (35%)
     
     const namesMapping = {
       "1": "Diego", "2": "Cris Fane", "3": "Lúcio", "4": "Ramon",
@@ -446,6 +485,36 @@
         });
       }
     }
+
+    // FUNÇÃO DE MÚSICA CONTROLE
+    function toggleMusic() {
+      if (bgMusic.paused) {
+        bgMusic.play().then(() => {
+          musicToggleBtn.textContent = "🔊 MÚSICA: ON";
+          musicToggleBtn.style.color = "#1A9B5A";
+          musicToggleBtn.style.borderColor = "#1A9B5A";
+        }).catch(err => console.log("Erro ao iniciar reprodução de áudio."));
+      } else {
+        bgMusic.pause();
+        musicToggleBtn.textContent = "🔇 MÚSICA: OFF";
+        musicToggleBtn.style.color = "var(--gold)";
+        musicToggleBtn.style.borderColor = "var(--gold)";
+      }
+    }
+
+    musicToggleBtn.addEventListener('click', toggleMusic);
+
+    // Toca no primeiro clique em qualquer elemento da página
+    document.body.addEventListener('click', () => {
+      if (bgMusic.paused && musicToggleBtn.textContent === "🔊 MÚSICA: OFF") {
+        bgMusic.play().then(() => {
+          musicToggleBtn.textContent = "🔊 MÚSICA: ON";
+          musicToggleBtn.style.color = "#1A9B5A";
+          musicToggleBtn.style.borderColor = "#1A9B5A";
+        }).catch(() => {});
+      }
+    }, { once: true });
+
 
     if(!localStorage.getItem('pasted_stickers')) localStorage.setItem('pasted_stickers', JSON.stringify([]));
     if(!localStorage.getItem('owned_inventory')) localStorage.setItem('owned_inventory', JSON.stringify([]));
@@ -643,22 +712,17 @@
       closeModalBtn.style.display = 'block';
     }
 
-    // NOVA LÓGICA: CONVERTE O ELEMENTO EM IMAGEM (PNG/JPG) E FAZ DOWNLOAD AUTOMÁTICO
     saveImgBtn.addEventListener('click', () => {
       saveImgBtn.textContent = "⏳ GERANDO IMAGEM...";
       saveImgBtn.disabled = true;
 
-      // html2canvas tira uma foto exata da caixinha do certificado na tela
       html2canvas(certBox, {
         backgroundColor: '#fdfbf7',
-        scale: 2, // Aumenta a qualidade/resolução da imagem final
+        scale: 2,
         logging: false,
         useCORS: true
       }).then(canvas => {
-        // Converte o canvas para uma imagem real (link base64)
         const imageURI = canvas.toDataURL("image/png");
-        
-        // Simula o clique de download no navegador do usuário
         const link = document.createElement('a');
         link.download = `Certificado_Campeao_${certDisplayName.textContent.replace(/ /g, "_")}.png`;
         link.href = imageURI;
@@ -666,7 +730,6 @@
         link.click();
         document.body.removeChild(link);
 
-        // Restaura o botão original
         saveImgBtn.textContent = "📥 SALVAR CERTIFICADO (IMAGEM)";
         saveImgBtn.disabled = false;
       }).catch(err => {
