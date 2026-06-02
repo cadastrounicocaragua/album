@@ -130,7 +130,7 @@
     transition: all 0.2s ease;
   }
   .pack-btn:hover { transform: scale(1.03); }
-  .pack-btn:disabled { background: #333; color: #666; cursor: not-allowed; box-shadow: none; }
+  .pack-btn:disabled { background: #333; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
 
   .pack-opened-display { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 5px; width: 100%; }
   .mini-sticker {
@@ -245,7 +245,6 @@
   }
   .modal-btn:hover { transform: scale(1.05); }
 
-  /* Botão fechar/voltar temporariamente */
   .close-modal-btn {
     position: absolute; top: 15px; right: 15px; background: transparent; border: none;
     color: #aaa; font-size: 24px; cursor: pointer; display: none;
@@ -271,14 +270,44 @@
 
   .album-footer { text-align: center; font-size: 12px; margin-top: 3rem; color: rgba(248,244,232,0.4); }
 
-  /* REGRAS DE IMPRESSÃO EXCLUSIVAS PARA EXPORTAR O CERTIFICADO PERFEITO */
+  /* REGRAS DE IMPRESSÃO EXCLUSIVAS (CORREÇÃO DE TEXTO SUMIDO) */
   @media print {
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    
     body * { display: none !important; }
-    html, body { background: #fff !important; min-height: auto !important; padding: 0 !important; margin: 0 !important; }
-    #cert-modal, #cert-box { display: block !important; position: absolute !important; inset: 0 !important; width: 100% !important; height: auto !important; background: #fdfbf7 !important; z-index: 99999 !important; padding: 40px !important; border: 12px double #b8860b !important; box-shadow: none !important; }
-    #cert-box * { display: block !important; color: #111 !important; }
+    
+    html, body { 
+      background: #fdfbf7 !important; 
+      min-height: auto !important; 
+      padding: 0 !important; 
+      margin: 0 !important; 
+    }
+    
+    #cert-modal, #cert-box { 
+      display: block !important; 
+      position: absolute !important; 
+      inset: 0 !important; 
+      width: 100% !important; 
+      height: auto !important; 
+      background: #fdfbf7 !important; 
+      z-index: 99999 !important; 
+      padding: 40px !important; 
+      border: 12px double #b8860b !important; 
+      box-shadow: none !important; 
+    }
+    
+    #cert-box * { 
+      display: block !important; 
+      color: #111111 !important; 
+    }
+    
     .cert-title { color: #0a6b3d !important; }
     .cert-sub { color: #b8860b !important; }
+    .cert-name { color: #000000 !important; border-bottom: 2px dashed #b8860b !important; }
     .cert-stamp { display: block !important; font-size: 50px !important; position: absolute !important; bottom: 40px !important; right: 50px !important; }
   }
 
@@ -548,7 +577,21 @@
             setTimeout(() => playSound('new'), 150);
           }
 
-          openPackBtn.disabled = false;
+          // Inicia timer de recarga de 10 segundos
+          let timeLeft = 10;
+          openPackBtn.textContent = `⏳ AGUARDE (${timeLeft}s)`;
+          
+          const timer = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+              clearInterval(timer);
+              openPackBtn.disabled = false;
+              openPackBtn.textContent = '🛍️ ABRIR PACOTINHO';
+            } else {
+              openPackBtn.textContent = `⏳ AGUARDE (${timeLeft}s)`;
+            }
+          }, 1000);
+
         }, 500);
       }, 500);
     });
@@ -601,7 +644,7 @@
     function verificarAlbumCompletoSemSom() {
       const totalPasted = document.querySelectorAll('.sticker-card.pasted').length;
       if (totalPasted === 9) {
-        exibirModalParabens(false);
+        exibirModalParabens();
       }
     }
 
@@ -616,14 +659,13 @@
           confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.6 } });
           confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } });
           if (Date.now() < fim) { requestAnimationFrame(frame); }
-          else { exibirModalParabens(true); }
+          else { exibirModalParabens(); }
         }());
       }
     }
 
-    function exibirModalParabens(comEfeitos) {
+    function exibirModalParabens() {
       certModal.style.display = 'flex';
-      // Se o usuário já tiver gerado o certificado antes, mantém ele na tela
       if(localStorage.getItem('registered_champion_name')) {
         travarCertificadoGerado(localStorage.getItem('registered_champion_name'));
       }
@@ -645,25 +687,22 @@
     function travarCertificadoGerado(nome) {
       certDisplayName.textContent = nome.toUpperCase();
       
-      // Esconde campos de digitação
       userNameInput.style.display = 'none';
       generateBtn.style.display = 'none';
       modalHeadline.style.display = 'none';
       modalLead.style.display = 'none';
       
-      // Mostra o certificado e botões de navegação
       certBox.style.display = 'block';
       savePdfBtn.style.display = 'inline-block';
       returnAlbumBtn.style.display = 'inline-block';
       closeModalBtn.style.display = 'block';
     }
 
-    // BOTÃO SALVAR / IMPRIMIR COMO PDF
+    // SALVAR / IMPRIMIR
     savePdfBtn.addEventListener('click', () => {
-      window.print(); // Ativa a janela de impressão do sistema configurada pelo CSS @media print
+      window.print();
     });
 
-    // BOTÕES DE FECHAR/VOLTAR PARA VER O ÁLBUM
     returnAlbumBtn.addEventListener('click', () => certModal.style.display = 'none');
     closeModalBtn.addEventListener('click', () => certModal.style.display = 'none');
 
